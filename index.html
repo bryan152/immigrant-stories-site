@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Immigrant Stories</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Welcome to Immigrant Stories</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="stories.html">Stories</a>
+      <a href="resources.html">Resources</a>
+      <a href="/admin">Admin Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Why I Created This</h2>
+      <p>
+        I recently got to travel back to my home country, Mexico, after many years away. It was a life-changing experience. This website is a space for immigrants to share their stories — about homecomings, identity, and everything in between.
+      </p>
+    </section>
+
+    <section>
+      <h2>Share Your Story</h2>
+      <p>Your story matters. If you'd like to share yours, fill out the form below. I’ll review and post selected stories (with identifying info removed).</p>
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <label for="name">Name (optional):</label>
+        <input type="text" name="name" id="name" />
+        <label for="email">Email (optional):</label>
+        <input type="email" name="email" id="email" />
+        <label for="story">Your Story:</label>
+        <textarea name="story" id="story" rows="10" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Immigrant Stories</p>
+  </footer>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</body>
+</html>
