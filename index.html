@@ -35,20 +35,21 @@
     <section>
       <h2>Share Your Story</h2>
       <p>Your story matters. If you'd like to share yours, fill out the form below. I’ll review and post selected stories (with identifying info removed).</p>
-      <form name="story-submission" method="POST" data-netlify="true">
+      <form name="story-submission" method="POST" data-netlify="true" action="/thankyou.html">
         <input type="hidden" name="form-name" value="story-submission" />
-
+      
         <label for="name">Name (optional):</label>
         <input type="text" name="contributor" id="name" />
-
+      
         <label for="email">Email (optional):</label>
         <input type="email" name="email" id="email" />
-
+      
         <label for="story">Your Story:</label>
         <textarea name="body" id="story" rows="10" required></textarea>
-
+      
         <button type="submit">Submit</button>
       </form>
+      
     </section>
   </main>
 
