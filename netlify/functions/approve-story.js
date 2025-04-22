@@ -5,12 +5,16 @@ const fetch = require("node-fetch");
 exports.handler = async (event) => {
   const { password, title, contributor, body, action } = JSON.parse(event.body);
 
-  if (password !== process.env.ADMIN_PASSWORD) {
-    return {
-      statusCode: 403,
-      body: JSON.stringify({ success: false, message: "Unauthorized" })
-    };
-  }  
+  console.log("Password received:", password);
+console.log("Password expected:", process.env.ADMIN_PASSWORD);
+
+if (!password || password !== process.env.ADMIN_PASSWORD) {
+  return {
+    statusCode: 403,
+    body: JSON.stringify({ success: false, message: "Unauthorized" })
+  };
+}
+
 
   if (action === "get-submissions") {
     const siteId = process.env.MY_SITE_ID;
