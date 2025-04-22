@@ -13,7 +13,7 @@ exports.handler = async (event) => {
   }  
 
   if (action === "get-submissions") {
-    const siteId = process.env.SITE_ID;
+    const siteId = process.env.MY_SITE_ID;
     const token = process.env.NETLIFY_PAT;
 
     const formRes = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms`, {
@@ -21,6 +21,13 @@ exports.handler = async (event) => {
     });
     const forms = await formRes.json();
     const storyForm = forms.find(f => f.name === "story-submission");
+    if (!storyForm) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ success: false, message: "Form not found" })
+      };
+    }
+    
 
     const subRes = await fetch(`https://api.netlify.com/api/v1/forms/${storyForm.id}/submissions`, {
       headers: { Authorization: `Bearer ${token}` }
