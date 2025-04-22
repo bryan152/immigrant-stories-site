@@ -13,22 +13,35 @@
       <a href="index.html">Home</a>
       <a href="stories.html">Stories</a>
       <a href="resources.html">Resources</a>
-      <a href="/admin">Admin Login</a>
     </nav>
   </header>
 
   <main>
     <h2>Community Stories</h2>
     <p>These stories were submitted by people who wanted to share their journey. Some have been lightly edited to protect privacy.</p>
-    <section class="story">
-      <h3>“Coming Home After 15 Years”</h3>
-      <p class="meta">Shared by an anonymous contributor</p>
-      <p>I never thought I’d see my hometown again. The moment I stepped off the bus and smelled the air, I felt 15 years of fear melt away. I hugged my mother like I did as a child, and we both cried.</p>
-    </section>
+    <div id="story-container"></div>
   </main>
 
   <footer>
     <p>© 2025 Immigrant Stories</p>
   </footer>
+
+  <script>
+    fetch('approved-stories.json')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('story-container');
+        data.forEach(story => {
+          const section = document.createElement('section');
+          section.className = 'story';
+          section.innerHTML = `
+            <h3>${story.title}</h3>
+            <p class="meta">Shared by ${story.contributor || "Anonymous"}</p>
+            <p>${story.body}</p>
+          `;
+          container.appendChild(section);
+        });
+      });
+  </script>
 </body>
 </html>

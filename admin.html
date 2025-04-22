@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin – Approve Stories</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-story {
+      background: #fff8dc;
+      border-left: 5px solid orange;
+      margin-bottom: 1.5em;
+      padding: 1em;
+    }
+    .admin-story button {
+      margin-top: 1em;
+      background-color: #27ae60;
+      color: white;
+      padding: 0.5em;
+      border: none;
+      cursor: pointer;
+    }
+    .admin-story button:hover {
+      background-color: #219150;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin – Pending Story Approvals</h1>
+    <p>This dashboard shows form submissions from your site. Click “Approve” to publish a story to your site.</p>
+  </header>
+  <main>
+    <div id="admin-container">Loading...</div>
+  </main>
+
+  <script>
+    const siteId = "4af8fccf-ab72-4bf9-ba8f-977d37098306";
+    const token = "nfp_phcur6ocBTdMpANtTASv4X3AWMGLJNpMf48b"; // <- ⚠️ paste your actual token here
+
+    // Fetch forms
+    fetch(`https://api.netlify.com/api/v1/sites/${siteId}/forms`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => res.json())
+    .then(forms => {
+      const storyForm = forms.find(f => f.name === "story-submission");
+      if (!storyForm) throw new Error("Form 'story-submission' not found.");
+      return fetch(`https://api.netlify.com/api/v1/forms/${storyForm.id}/submissions`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    })
+    .then(res => res.json())
+    .then(submissions => {
+      const container = document.getElementById("admin-container");
+      container.innerHTML = "";
+
+      if (submissions.length === 0) {
+        container.innerHTML = "<p>No submissions yet.</p>";
+        return;
+      }
+
+      submissions.forEach(sub => {
+        const div = document.createElement("div");
+        div.className = "admin-story";
+        div.innerHTML = `
+          <h3>${sub.data.title || "Untitled"}</h3>
+          <p><strong>Contributor:</strong> ${sub.data.contributor || "Anonymous"}</p>
+          <p>${sub.data.body}</p>
+          <button>Approve</button>
+        `;
+        div.querySelector("button").addEventListener("click", () => approveStory(sub.data, div));
+        container.appendChild(div);
+      });
+    })
+    .catch(err => {
+      console.error("Error loading submissions:", err);
+      document.getElementById("admin-container").innerHTML = "<p>Failed to load submissions.</p>";
+    });
+
+    function approveStory(data, container) {
+      fetch("approved-stories.json")
+        .then(res => res.json())
+        .then(existing => {
+          const updated = [...existing, {
+            title: data.title || "Untitled",
+            contributor: data.contributor || "Anonymous",
+            body: data.body || ""
+          }];
+
+          // This fetch will only work in a backend or authorized environment
+          alert("This would now push to approved-stories.json if writable. Add via GitHub or automate later.");
+          console.log("Approved story data:", updated);
+
+          // Optional: remove the approved story from view
+          container.remove();
+        });
+    }
+  </script>
+</body>
+</html>
