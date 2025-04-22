@@ -45,23 +45,20 @@
     }
 
     function loadSubmissions() {
-      document.getElementById("admin-container").innerHTML = "<p>Loading submissions...</p>";
-      fetch("https://api.netlify.com/api/v1/sites/4af8fccf-ab72-4bf9-ba8f-977d37098306/forms", {
-        headers: { Authorization: "Bearer YOUR_NETLIFY_PAT" } // Just for local dev testing, remove on public deploy
-      })
-      .then(res => res.json())
-      .then(forms => {
-        const form = forms.find(f => f.name === "story-submission");
-        return fetch(`https://api.netlify.com/api/v1/forms/${form.id}/submissions`, {
-          headers: { Authorization: "Bearer YOUR_NETLIFY_PAT" }
-        });
-      })
-      .then(res => res.json())
-      .then(data => renderSubmissions(data))
-      .catch(() => {
-        document.getElementById("admin-container").innerHTML = "<p>Failed to load.</p>";
-      });
-    }
+  document.getElementById("admin-container").innerHTML = "<p>Loading submissions...</p>";
+
+  fetch("/.netlify/functions/approve-story", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password: ADMIN_PASSWORD, action: "get-submissions" })
+  })
+  .then(res => res.json())
+  .then(data => renderSubmissions(data.submissions || []))
+  .catch(() => {
+    document.getElementById("admin-container").innerHTML = "<p>Failed to load submissions.</p>";
+  });
+}
+
 
     function renderSubmissions(submissions) {
       const container = document.getElementById("admin-container");
