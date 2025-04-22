@@ -53,11 +53,18 @@
     body: JSON.stringify({ password: ADMIN_PASSWORD, action: "get-submissions" })
   })
   .then(res => res.json())
-  .then(data => renderSubmissions(data.submissions || []))
+  .then(data => {
+    if (!data.success) {
+      document.getElementById("admin-container").innerHTML = `<p style="color:red;">${data.message}</p>`;
+    } else {
+      renderSubmissions(data.submissions || []);
+    }
+  })
   .catch(() => {
     document.getElementById("admin-container").innerHTML = "<p>Failed to load submissions.</p>";
   });
 }
+
 
 
     function renderSubmissions(submissions) {

@@ -10,7 +10,7 @@ exports.handler = async (event) => {
       statusCode: 403,
       body: JSON.stringify({ success: false, message: "Unauthorized" })
     };
-  }
+  }  
 
   if (action === "get-submissions") {
     const siteId = process.env.SITE_ID;
